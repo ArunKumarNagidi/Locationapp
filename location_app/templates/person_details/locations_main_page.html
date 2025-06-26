@@ -1,0 +1,279 @@
+{% extends 'location_base/base.html' %}
+
+{% block content %}
+<!--alert starts here-->
+{% include 'alertcomponents/alert_components.html' %}
+<!--alert ends here-->
+
+{% include 'base_assets/base_css.html' %}
+
+<!-- breadcrumb starts here -->
+<div class="row">
+    <div class="col-10 m-auto mt-2">
+        <div class="d-sm-flex align-items-center justify-content-between">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{% url 'locationsMainPage' %}">Person Details</a></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<!--breadcrumb ends here-->
+
+<!-- person start here -->
+<div class="row">
+    <div class="col-10 mt-3 m-auto">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-6">
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn text-white" style="background-color:#405189;" data-bs-toggle="modal" data-bs-target="#personModal">
+                            <i class="bx bx-plus-circle"></i> Person
+                        </button>
+                        <!-- person creation modal starts here-->
+                        <div class="modal fade" id="personModal" tabindex="-1" aria-labelledby="personModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background-color:#405189;padding:10px 15px 10px 10px;">
+                                        <h1 class="modal-title text-white mb-0 fs-5" id="personModalLabel">Add Person</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: white;"></button>
+                                    </div>
+                                    <form id="person_form" method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 mb-4">
+                                                    <label for="person_name" class="form-label">Person Name <span style="color:red;">*</span></label>
+                                                    <input type="text" id="person_name" class="form-control" name="person_name" placeholder="Ex: John Doe">
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 mb-4">
+                                                    <label for="gender" class="form-label">Gender <span style="color:red;">*</span></label>
+                                                    <select name="gender" id="gender" class="form-select">
+                                                        <option value="">Select gender</option>
+                                                        <option value="Male">Male</option>
+                                                        <option value="Female">Female</option>
+                                                        <option value="Others">Others</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 mb-4">
+                                                    <label for="country" class="form-label">Country <span style="color:red;">*</span></label>
+                                                    <select name="country" id="country" class="form-select" onchange="updateStateOptions()">
+                                                        <option value="">Select country</option>
+                                                        {% for i in country %}
+                                                            <option value="{{ i.id }}">{{ i.country_name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 mb-4">
+                                                    <label for="state" class="form-label">State <span style="color:red;">*</span></label>
+                                                    <select name="state" id="state" class="form-select" onchange="updateCityOptions()">
+                                                        <option value="">Select state</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 mb-4">
+                                                    <label for="city" class="form-label">City <span style="color:red;">*</span></label>
+                                                    <select name="city" id="city" class="form-select" onchange="updateAreaOptions()">
+                                                        <option value="">Select city</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 mb-4">
+                                                    <label for="area" class="form-label">Area <span style="color:red;">*</span></label>
+                                                    <select name="area" id="area" class="form-select">
+                                                        <option value="">Select area</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" id="createPersonFormSubmit" class="btn text-white" style="background-color:#405189;">Submit</button>
+                                            <button type="button" class="btn bg-light" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- person creation modal ends here-->
+                    </div>
+                    <div class="col-1"></div>
+                    <div class="col-5">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query" hx-get="{% url 'personRenderData' %}" hx-trigger="input changed delay:500ms, query" hx-swap="innerHTML" hx-target="#personTableBodyContainer">
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <!--card body starts here-->
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Person Name</th>
+                                <th>Gender</th>
+                                <th>Area</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Country</th>
+                                <th>Created On</th>
+                                <th>Status</th>
+                                <th style="text-align:center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody
+                            hx-get="{% url 'personRenderData' %}"
+                            hx-swap="innerHTML"
+                            hx-target="this"
+                            hx-trigger="revealed once"
+                            id="personTableBodyContainer">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-center" id="pagination_div"></div>
+                <!--card body ends here-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- person ends here -->
+
+<!--base_assets js file-->
+{% include 'base_assets/base_js.html' %}
+
+<script>
+$(document).ready(function() {
+    // Function to capitalize first letter
+    function capitalizeFirstLetter(str) {
+        if (str.length > 0) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+        return str;
+    }
+
+    // Custom validation methods
+    $.validator.addMethod("capitalizeFirstLetter", function(value, element) {
+        $(element).val(capitalizeFirstLetter(value));
+        return true;
+    }, "");
+
+    $.validator.addMethod("letterStartNoLeadingSpace", function(value, element) {
+        return this.optional(element) || /^[a-zA-Z][^\s].*/.test(value);
+    }, "Person name must start with a letter and have no leading space.");
+
+    $.validator.addMethod("atLeastOneAlpha", function(value, element) {
+        return this.optional(element) || /[a-zA-Z]/.test(value);
+    }, "Please enter at least one alphabetical character.");
+
+    $.validator.addMethod("noDoubleSpace", function(value, element) {
+        return this.optional(element) || !/\s{2,}/.test(value);
+    }, "Double spaces are not allowed.");
+
+    $.validator.addMethod("alphaSpaceOnly", function(value, element) {
+        return this.optional(element) || /^[a-zA-Z\s]*$/.test(value);
+    }, "Only alphabetical characters and spaces are allowed.");
+
+    $('#person_form').validate({
+        rules: {
+            person_name: {
+                required: true,
+                alphaSpaceOnly: true,
+                noDoubleSpace: true,
+                letterStartNoLeadingSpace: true,
+                atLeastOneAlpha: true,
+                minlength: 2,
+                maxlength: 100,
+                capitalizeFirstLetter: true
+            },
+            gender: { required: true },
+            country: { required: true },
+            state: { required: true },
+            city: { required: true },
+            area: { required: true }
+        },
+        messages: {
+            person_name: {
+                required: "Please enter the person name.",
+                alphaSpaceOnly: "Only alphabetical characters and spaces are allowed.",
+                noDoubleSpace: "Double spaces are not allowed.",
+                letterStartNoLeadingSpace: "Person name must start with a letter and have no leading space.",
+                atLeastOneAlpha: "Please enter at least one alphabetical character.",
+                minlength: "Person name should be at least 2 characters.",
+                maxlength: "Person name should not exceed 100 characters."
+            },
+            gender: { required: "Please select a gender." },
+            country: { required: "Please select a country." },
+            state: { required: "Please select a state." },
+            city: { required: "Please select a city." },
+            area: { required: "Please select an area." }
+        },
+        submitHandler: function(form) {
+            console.log("Form is valid.");
+            form.submit();
+        }
+    });
+
+    // Function to update state options based on selected country
+    window.updateStateOptions = function() {
+        var countryId = $('#country').val();
+        var stateSelect = $('#state');
+        stateSelect.empty();
+        stateSelect.append('<option value="">Select state</option>');
+
+        if (countryId) {
+            $.ajax({
+                url: "{% url 'getStatesByCountry' %}",
+                data: { country_id: countryId },
+                dataType: 'json',
+                success: function(data) {
+                    $.each(data.states, function(index, state) {
+                        stateSelect.append('<option value="' + state.id + '">' + state.state_name + '</option>');
+                    });
+                }
+            });
+        }
+    };
+
+    // Function to update city options based on selected state
+    window.updateCityOptions = function() {
+        var stateId = $('#state').val();
+        var citySelect = $('#city');
+        citySelect.empty();
+        citySelect.append('<option value="">Select city</option>');
+
+        if (stateId) {
+            $.ajax({
+                url: "{% url 'getCitiesByState' %}",
+                data: { state_id: stateId },
+                dataType: 'json',
+                success: function(data) {
+                    $.each(data.cities, function(index, city) {
+                        citySelect.append('<option value="' + city.id + '">' + city.city_name + '</option>');
+                    });
+                }
+            });
+        }
+    };
+
+    // Function to update area options based on selected city
+    window.updateAreaOptions = function() {
+        var cityId = $('#city').val();
+        var areaSelect = $('#area');
+        areaSelect.empty();
+        areaSelect.append('<option value="">Select area</option>');
+
+        if (cityId) {
+            $.ajax({
+                url: "{% url 'get_areas_by_city' %}",
+                data: { city_id: cityId },
+                dataType: 'json',
+                success: function(data) {
+                    $.each(data.areas, function(index, area) {
+                        areaSelect.append('<option value="' + area.id + '">' + area.area_name + '</option>');
+                    });
+                }
+            });
+        }
+    };
+});
+</script>
+{% endblock %}

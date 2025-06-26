@@ -1,0 +1,83 @@
+{% extends 'location_base/base.html' %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-10 col-md-10 col-sm-12 m-auto mt-5">
+        <div class="card">
+            <div class="card-header bg-success bg-opacity-75">
+                <h1 class="fs-5 text-white">Location</h1>
+            </div>
+            <div class="card-body">
+                    <div class="row">
+                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4 mt-4">
+                        <a href="{% url 'showCountry' %}" class="text-decoration-none">
+                            <div class="card border-bottom border-3 border-success p-2 mb-2">
+                                <div class="card-body">
+                                   <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0 fs-4 px-2 bg-primary bg-opacity-10">
+                                            <i class="ri-earth-fill"></i>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <p class="card-text fs-5">Country</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4 mt-4">
+                            <a href="{% url 'showState' %}" class="text-decoration-none">
+                                <div class="card border-bottom border-3 border-success p-2 mb-2">
+                                    <div class="card-body">
+                                       <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 fs-4 px-2 bg-primary bg-opacity-10">
+                                                <i class="ri-earth-fill"></i>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <p class="card-text fs-5">State</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4 mt-4">
+                            <a href="{% url 'showCity' %}" class="text-decoration-none">
+                                <div class="card border-bottom border-3 border-success p-2 mb-2">
+                                    <div class="card-body">
+                                       <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 fs-4 px-2 bg-primary bg-opacity-10">
+                                                <i class="ri-earth-fill"></i>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <p class="card-text fs-5">City</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4 mt-4">
+                            <a href="{% url 'showArea' %}" class="text-decoration-none">
+                                <div class="card border-bottom border-3 border-success p-2 mb-2">
+                                    <div class="card-body">
+                                       <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 fs-4 px-2 bg-primary bg-opacity-10">
+                                                <i class="ri-earth-fill"></i>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <p class="card-text fs-5">Area</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

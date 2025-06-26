@@ -1,0 +1,21 @@
+{% if status_page == 'person_page' %}
+<td class="border-light" id="person_status_td{{ person.id }}">
+    {% if person.person_status %}
+        <span class="badge bg-success">
+            <a href="#" hx-post="{% url 'personStatusChange' person.id %}"
+               hx-target="#person_status_td{{ person.id }}"
+               hx-trigger="click once"
+               hx-swap="innerHTML"
+               hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' class="text-white">Active</a>
+        </span>
+    {% else %}
+        <span class="badge bg-danger">
+            <a href="#" hx-post="{% url 'personStatusChange' person.id %}"
+               hx-target="#person_status_td{{ person.id }}"
+               hx-trigger="click once"
+               hx-swap="innerHTML"
+               hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' class="text-white">Deactive</a>
+        </span>
+    {% endif %}
+</td>
+{% endif %}
